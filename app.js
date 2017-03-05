@@ -14,6 +14,17 @@ app.get('/admin', function(req, res){
 	res.sendFile(__dirname + '/views/admin.html');
 });
 
+var server_port = process.env.PORT || 8080;
+
+
+var server = app.listen(server_port, function(){
+ console.log("Listening on " 
+           + ", server_port " + server_port);
+});
+var io = require('socket.io').listen(sever);
+
+
+
 var users = [];
 var admin;
 var seconds;
@@ -122,14 +133,7 @@ setInterval(function(){
 	io.emit('time', date.toLocaleTimeString());
 },1000);
 
-var server_port = process.env.PORT || 8080;
 
-
-var server = app.listen(server_port, function(){
- console.log("Listening on " 
-           + ", server_port " + server_port);
-});
-var io = require('socket.io').listen(sever);
 
 function shuffle(array) {
   var copy = [], n = array.length, i;
