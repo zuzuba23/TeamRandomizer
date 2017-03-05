@@ -1,6 +1,6 @@
 var app = require('express')();
 var http = require('http').Server(app);
-var io = require('socket.io').listen(http);
+
 var util = require('util');
 var express = require('express');
 
@@ -125,10 +125,11 @@ setInterval(function(){
 var server_port = process.env.PORT || 8080;
 
 
-app.listen(server_port, function(){
+var server = app.listen(server_port, function(){
  console.log("Listening on " 
            + ", server_port " + server_port);
 });
+var io = require('socket.io').listen(sever);
 
 function shuffle(array) {
   var copy = [], n = array.length, i;
