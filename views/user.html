@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head><title id="title">USER</title>
-	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://teamrand.herokuapp.com//socket.io/socket.io.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	
 	</head>
@@ -22,7 +22,7 @@
 		</div>
 	</body>
 	<script>
-	var socket = io();
+	var socket = io.connect('https://teamrand.herokuapp.com/');
 	var username = 'USER';
 	$('#submit_btn').click(function(){
 		socket.emit('userSelectName',$('#input').val());
