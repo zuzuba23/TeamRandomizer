@@ -22,7 +22,7 @@
 		</div>
 	</body>
 	<script>
-	var socket = io.connect('https://teamrand.herokuapp.com/');
+	var socket = io();
 	var username = 'USER';
 	$('#submit_btn').click(function(){
 		socket.emit('userSelectName',$('#input').val());
