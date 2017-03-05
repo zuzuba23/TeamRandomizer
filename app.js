@@ -21,7 +21,7 @@ var server = app.listen(server_port, function(){
  console.log("Listening on " 
            + ", server_port " + server_port);
 });
-var io = require('socket.io').listen(sever);
+var io = require('socket.io').listen(server);
 
 
 
