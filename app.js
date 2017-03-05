@@ -126,7 +126,7 @@ var server_port = process.env.PORT || 8080;
 
 
 app.listen(server_port, function(){
- console.log("Listening on " + server_ip_address 
+ console.log("Listening on " 
            + ", server_port " + server_port);
 });
 
