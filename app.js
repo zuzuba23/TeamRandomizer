@@ -44,6 +44,7 @@ io.on('connection', function(socket){
 				item.emit('adminDisconnectedFromServer');
 			});
 		}
+		sendListOfPlayers();
 	});
 
 	socket.on('userSelectName', function(data){
