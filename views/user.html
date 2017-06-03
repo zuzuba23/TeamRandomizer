@@ -29,11 +29,12 @@
 	var socket = io();
 	var username = 'USER';
 	$('#submit_btn').click(function(){
-		if($('#input').val() != ""){
+		if($('#input').val() != "" && $('input[name=corl]:checked').val() != "undefined"){
 			socket.emit('userSelectName',$('#input').val());
 			username = $('#input').val();
+		} else if($('input[name=corl]:checked').val() != "undefined" && $('#input').val() != ""){
+			console.log("corl");
 		}
-		console.log($('input[name=corl]:checked').val());
 	});
 	
 	$('#statusChange').click(function(){
