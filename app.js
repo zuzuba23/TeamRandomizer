@@ -48,13 +48,22 @@ io.on('connection', function(socket){
 	});
 
 	socket.on('userSelectName', function(data){
-		socket.emit('serverRegisteredUser',data);
-		socket['nickname'] = data;
-		socket['ready'] = false;
-		users.push(socket);
-		if(admin != null)
-			socket.emit('adminConnectedToServer', admin['nickname']);
-		sendListOfPlayers();
+		var x = 0;
+		users.forEach(function(item){
+			if(item.nickname == data)
+				x = 1;
+		});
+		if(x == 0){
+			socket.emit('serverRegisteredUser',data);
+			socket['nickname'] = data;
+			socket['ready'] = false;
+			users.push(socket);
+			if(admin != null)
+				socket.emit('adminConnectedToServer', admin['nickname']);
+			sendListOfPlayers();
+		} else{
+			socket.emit('userAlreadyExists');
+		}
 	});
 	
 	socket.on('adminConnected',function(adminName){
