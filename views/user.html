@@ -33,7 +33,8 @@
 			socket.emit('userSelectName',$('#input').val());
 			username = $('#input').val();
 		} else if($('input[name=corl]:checked').val() == "corleony" && $('#input').val() == ""){
-			console.log($('input[name=corl]:checked').val());
+			socket.emit('userSelectName','Corleony');
+			username = 'Corleony';
 		}
 	});
 	
