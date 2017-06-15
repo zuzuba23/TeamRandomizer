@@ -85,6 +85,12 @@ io.on('connection', function(socket){
 		socket['ready'] = !socket['ready'];
 		sendListOfPlayers();
 	});
+	
+	socket.on('clearTeams',function(){
+		users.forEach(function(item){
+			item.emit('clearTeams');
+		});
+	});
 });
 
 function sendListOfPlayers(){

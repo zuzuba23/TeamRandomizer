@@ -16,6 +16,7 @@
 		</div>
 		<div id= "buttonDiv" hidden="true">
 			<input type="button" id="startProcess" value="Start!!!">
+			<input type="button" id="clearTeams" value="Clear!">
 		</div>
 		<div id="teams">
 			
@@ -63,5 +64,11 @@
 		html += '</table>';
 		$('#teams').html(html);
 	});
+	
+	$('#clearTeams').click(function(){
+		socket.emit('clearTeams');
+		$('#teams').html('');
+	});
+	
 	</script>
 </html>

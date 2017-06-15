@@ -9,7 +9,7 @@
 		<div id="input_div">
 			<input type="text" id="input">
 			<input type="button" id="submit_btn" value="OK">
-			<br>Daca esti Corleony bifeaza aici <input type="radio" name="corl" value="corleony" id="corleonyRadio">Corleony</input> si dai OK.
+			<br><br>Daca esti Corleony da click <button id="corleonyButton">aici</button>
 		</div>
 		<div id="errorDiv">
 		
@@ -29,13 +29,13 @@
 	var socket = io();
 	var username = 'USER';
 	$('#submit_btn').click(function(){
-		if($('#input').val() != "" && $('input[name=corl]:checked').val() != "undefined"){
-			socket.emit('userSelectName',$('#input').val());
-			username = $('#input').val();
-		} else if($('input[name=corl]:checked').val() == "corleony" && $('#input').val() == ""){
-			socket.emit('userSelectName','Corleony');
-			username = 'Corleony';
-		}
+		socket.emit('userSelectName',$('#input').val());
+		username = $('#input').val();
+	});
+	
+	$('#corleonyButton').click(function(){
+		socket.emit('userSelectName','Corleony');
+		username = 'Corleony';
 	});
 	
 	$('#statusChange').click(function(){
@@ -102,6 +102,10 @@
 	
 	socket.on('userAlreadyExists',function(){
 		$('#errorDiv').html('<p style="color:red;">Username exista deja.</p>');
+	});
+	
+	socket.on('clearTeams',function(){
+		$('#teams').html('');
 	});
 	</script>
 </html>
