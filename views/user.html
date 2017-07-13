@@ -1,111 +1,140 @@
 <!DOCTYPE html>
 <html>
 	<head><title id="title">USER</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="/socket.io/socket.io.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="/css/bootstrap-solar-theme.css" media="screen">
 	</head>
-	<body><h3 id="user_name">Hello, User. Please input your Username</h3>
-		<div id="input_div">
-			<input type="text" id="input">
-			<input type="button" id="submit_btn" value="OK">
-			<br><br>Daca esti Corleony da click <button id="corleonyButton">aici</button>
+	<body id="body">
+		<!--	NAVBAR	-->
+		<nav class="navbar navbar-default">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">
+						LTeam
+					</a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="active">
+							<a href="#">
+								Home 
+								<span class="sr-only">
+									(current)
+								</span>
+							</a>
+						</li>
+						<li>
+							<a href="#" id="title2">
+							
+							</a>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							<a href="#" onclick="ChangeChampion();">
+								Change Champion
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	
+		<!--	BODY CONTAINER	-->
+		<div class="container">
+			<div class="row">
+				<h1 id="titleUsername">Helo, User!</h1>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="panel panel-primary" id="loginPanel">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								Join!
+							</h3>
+						</div>
+						<div class="panel-body">
+							<div class="form-group has-success">
+								<label class="control-label" for="inputSuccess">Username:</label>
+								<input type="text" class="form-control" id="username">
+							</div>
+							<a href="#" class="btn btn-success btn-lg btn-block" id="submitBtn">Submit!</a>
+							<br>
+							Daca esti Corleony da click 
+							<a href="#" class="btn btn-info btn-sm" id="corleonyButton">
+								aici
+							</a>
+							<div id="errorDiv">
+							
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-primary" id="statusDiv" hidden>
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								Let's see...
+							</h3>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="row">
+										<div class="col-md-1" id="statusImgDiv">
+											<img src="not_ready.png" height="20" width="20">
+										</div>
+										<div class="col-md-6">
+											<h3 class="text-warning block" status="0" id="statusMsg" style="margin-top:0px;">Not Ready</h3>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<a href="#" class="btn btn-default btn-lg btn-block" id="statusChangeBtn">Change</a>
+								</div>
+							</div>
+							<div class="row" id="playersStatus">
+								
+							</div>
+							<div class="row" id="teams">
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<img class="img-responsive" id="championImage"> 
+				</div>
+			</div>
+			
 		</div>
-		<div id="errorDiv">
 		
-		</div>
-		<div id="statusDiv" hidden="true">
-			<p id="status" style="color:red;" status="0"><img src="not_ready.png" height="20" width="20">Not Ready</p>
-			<input type="button" id="statusChange" value="Change">
-		</div>
-		<div id="playerStatus">
-			
-		</div>
-		<div id="teams">
-			
+		<!--	ERROR MODAL	-->
+		<div class="modal" id="errorModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Error</h4>
+					</div>
+					<div class="modal-body">
+						<p>An user with the same username already exists. Please choose another nickname!</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
-	<script>
-	var socket = io();
-	var username = 'USER';
-	$('#submit_btn').click(function(){
-		socket.emit('userSelectName',$('#input').val());
-		username = $('#input').val();
-	});
 	
-	$('#corleonyButton').click(function(){
-		socket.emit('userSelectName','Corleony');
-		username = 'Corleony';
-	});
-	
-	$('#statusChange').click(function(){
-		if($('#status').attr('status') == 0){
-			$('#status').attr('status',1);
-			$('#status').attr('style','color:green');
-			$('#status').html('<img src="ready.png" height="20" width="20">Ready');
-		}else{
-			$('#status').attr('status',0);
-			$('#status').attr('style','color:red');
-			$('#status').html('<img src="not_ready.png" height="20" width="20">Not Ready');
-		}
-		socket.emit('userChangeStatus');
-	});
-	
-	socket.on('serverRegisteredUser',function(data){
-		$('#input_div').hide();
-		$('#errorDiv').hide();
-		$('#user_name').html('Hello ' + data + '<br><p id="adminStatusMsg">Waiting for admin...</p>');
-		$('#statusDiv').show();
-	});
-	
-	socket.on('adminConnectedToServer',function(data){
-		$('#adminStatusMsg').html('Admin ' + data + ' is connected.');
-	});
-	
-	socket.on('adminDisconnectedFromServer',function(){
-		$('#adminStatusMsg').html('Waiting for admin...');
-	});
-	
-	socket.on('time',function(data){
-		$('#title').html(username + ' - ' + data);
-	});
-	
-	socket.on('preparingMessage',function(data){
-		$('#teams').html('Action in ' + data);
-		$('#statusDiv').hide();
-	});
-	
-	socket.on('playerList',function(data){
-		html = '<ul>';
-		data.forEach(function(item){
-			if(item.status == true){
-				html += '<li style="color:green;">' + '<img src="ready.png" height="20" width="20">' +  item.nick + '</li>';
-			} else{
-				html += '<li style="color:red;">' + '<img src="not_ready.png" height="20" width="20">' +  item.nick + '</li>';
-			}
-		});
-		html += '</ul>';
-		$('#playerStatus').html(html);
-	});
-	
-	socket.on('teamsRandom',function(data){
-		html = '';
-		html += '<table border="1px"><th>Echipa 1</th><th>Echipa 2</th>';
-		for(var i=0;i<data[0].length;i++){
-			html += '<tr><td>';
-			html += data[0][i] + '</td><td>' + data[1][i] + '</td>';
-			html += '</tr>';
-		}
-		html += '</table>';
-		$('#teams').html(html);
-	});
-	
-	socket.on('userAlreadyExists',function(){
-		$('#errorDiv').html('<p style="color:red;">Username exista deja.</p>');
-	});
-	
-	socket.on('clearTeams',function(){
-		$('#teams').html('');
-	});
+	<script src="js/userScript.js">
 	</script>
 </html>

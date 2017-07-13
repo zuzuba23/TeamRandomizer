@@ -1,10 +1,18 @@
+//https://bootswatch.com/solar/#indicators
 var app = require('express')();
 var http = require('http').Server(app);
 
 var util = require('util');
 var express = require('express');
+var fs = require('fs');
 
 app.use(express.static(__dirname + '/img'));
+
+
+app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
+app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
+app.use('/js', express.static(__dirname + '/scripts'));
 
 app.get('/', function(req, res){
 	res.sendFile(__dirname + '/views/user.html');
@@ -53,6 +61,9 @@ io.on('connection', function(socket){
 			if(item.nickname == data)
 				x = 1;
 		});
+		if(admin)
+			if(admin['nickname'] == data)
+				x = 1;
 		if(x == 0){
 			socket.emit('serverRegisteredUser',data);
 			socket['nickname'] = data;
@@ -66,6 +77,20 @@ io.on('connection', function(socket){
 		}
 	});
 	
+	socket.on('kickPlayer',function(name){
+		users.forEach(function(item){
+			console.log(item.nickname);
+			if(item.nickname == name){
+				var index = users.indexOf(item);
+				if(index > -1){
+					item.emit('youHaveBeenKicked');
+					users.splice(index,1);
+				}
+			}
+		});
+		sendListOfPlayers();
+	});
+	
 	socket.on('adminConnected',function(adminName){
 		socket['ready'] = true;
 		socket['nickname'] = adminName;
@@ -77,7 +102,7 @@ io.on('connection', function(socket){
 	});
 	
 	socket.on('startProcess',function(){
-		seconds = 5;
+		seconds = 4;
 		emitForSeconds();
 	});
 	
@@ -89,6 +114,22 @@ io.on('connection', function(socket){
 	socket.on('clearTeams',function(){
 		users.forEach(function(item){
 			item.emit('clearTeams');
+		});
+	});
+	
+	socket.on('changeChampion',function(){
+		const folder = __dirname + '/img/champions/';
+		var imgList = [];
+		fs.readdir(folder, function(err, files){
+			files.forEach(function(item){
+				imgList.push(item);
+			});
+			var item = imgList[Math.floor(Math.random()*imgList.length)];
+			//console.log(item);
+			fs.readFile(__dirname + '/img/champions/' + item, function(err, data){
+				//socket.emit('imageConversionByClient', { image: true, buffer: data });
+				socket.emit('newChampion', "data:image/png;base64,"+ data.toString("base64"));
+			});
 		});
 	});
 });
