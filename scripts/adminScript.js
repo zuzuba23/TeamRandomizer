@@ -35,10 +35,12 @@ var socket = io();
 	socket.on('playerList',function(data){
 		html = '<ul class="list-unstyled">';
 		data.forEach(function(item){
-			if(item.status == true){
+			if(item.status == true && username != item.nick){
 				html += '<li style="color:green;"><div class="row">' + '<div class="col-md-1"><img src="ready.png" height="20" width="20"></div><div class="col-md-8"><h3 style="margin-top:0px;">' +  item.nick + '</h3></div><div class="col-md-1"><a href="#" class="btn btn-warning" onclick="kickPlayer(\'' + item.nick + '\')">X</a></div></div></li>';
-			} else{
+			} else if(item.status == false && username != item.nick){
 				html += '<li style="color:green;"><div class="row">' + '<div class="col-md-1"><img src="not_ready.png" height="20" width="20"></div><div class="col-md-8"><h3 style="margin-top:0px;">' +  item.nick + '</h3></div><div class="col-md-1"><a href="#" class="btn btn-warning" onclick="kickPlayer(\'' + item.nick + '\')">X</a></div></div></li>';
+			} else{
+				html += '<li style="color:green;"><div class="row">' + '<div class="col-md-1"><img src="ready.png" height="20" width="20"></div><div class="col-md-8"><h3 style="margin-top:0px;">' +  item.nick + '</h3></div></div></li>';
 			}
 		});
 		html += '</ul>';
